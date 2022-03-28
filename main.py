@@ -110,8 +110,9 @@ class Episode:
         if file.headers['Etag'] != hashlib.md5(file.content).hexdigest():
             error(f"下载内容校验和不正确! {file.headers['Etag']} ≠ {hashlib.md5(file.content).hexdigest()}")
             # raise Exception
-
-        with open(os.path.join(self.rootPath, f"{self.ord}_{index}.jpg"), 'wb') as f:
+        imgPath = os.path.join(self.rootPath, f"{self.ord}_{index}.jpg")
+        print(imgPath)
+        with open(imgPath, 'wb') as f:
             f.write(file.content)
 
         # 返回头的ETag正好是文件的md5校验和
@@ -127,7 +128,10 @@ class Episode:
         payloads = {
             'ep_id': self.id
         }
-        if os.path.exists(self.rootPath + f'/{self.ord}.pdf'):
+        # if os.path.exists(self.rootPath + f'/{self.ord}.pdf'):
+        #     # 相同文件名已经存在 跳过下载
+        #     return
+        if os.path.exists(self.rootPath+f"{self.ord}"):
             # 相同文件名已经存在 跳过下载
             return
         rep = requests.post(url, data=payloads, headers=self.headers)
@@ -155,8 +159,8 @@ class Episode:
                     i += 1
 
                     # progress.update(tid, advance=1, total=len(images), description=f'正在下载第{self.ord}话 "{self.title}"')
-                with open(self.rootPath + f'/{self.ord}.pdf', 'wb') as f:
-                    f.write(img2pdf.convert(imgs))
+                # with open(self.rootPath + f'/{self.ord}.pdf', 'wb') as f:
+                #     f.write(img2pdf.convert(imgs))
 
                 @retry()
                 def _():
@@ -244,14 +248,14 @@ class Comic:
                         t.join()
                         progress.update(epiTask, advance=1)
                     # time.sleep(0.5)
-            if os.path.exists(f'./{self.id}.pdf'):
-                os.remove(f'./{self.id}.pdf')
-            merger = PdfFileMerger()
-            for pdf in track(self.episodes, description='正在合并PDF...'):
-                path = os.path.join('.', 'data', str(self.id), f'{pdf.ord}.pdf')
-                if os.path.exists(path):
-                    merger.append(PdfFileReader(path), bookmark=pdf.title)
-            merger.write(f'./{self.id}.pdf')
+            # if os.path.exists(f'./{self.id}.pdf'):
+            #     os.remove(f'./{self.id}.pdf')
+            # merger = PdfFileMerger()
+            # for pdf in track(self.episodes, description='正在合并PDF...'):
+            #     path = os.path.join('.', 'data', str(self.id), f'{pdf.ord}.pdf')
+            #     if os.path.exists(path):
+            #         merger.append(PdfFileReader(path), bookmark=pdf.title)
+            # merger.write(f'./{self.id}.pdf')
 
             info('任务完成!')
             # shutil.rmtree(f'./data/{self.id}')
