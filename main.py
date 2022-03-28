@@ -131,8 +131,11 @@ class Episode:
         # if os.path.exists(self.rootPath + f'/{self.ord}.pdf'):
         #     # 相同文件名已经存在 跳过下载
         #     return
-        if os.path.exists(self.rootPath+f"{self.ord}"+'/1_1.jpg'):
+        first_file = os.path.join(self.rootPath,f"{self.ord}_1.jpg")
+        print('start',first_file)
+        if os.path.exists(first_file):
             # 相同文件名已经存在 跳过下载
+            print(first_file, '相同文件名已经存在 跳过下载')
             return
         rep = requests.post(url, data=payloads, headers=self.headers)
         if rep.ok:

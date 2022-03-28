@@ -19,6 +19,8 @@ for root,dirs,files in os.walk(img_path):
         cha,ind = file.split('_')
         fn = os.path.join(root,file)
         new_fn = os.path.join(target_path,manga_name,cha.zfill(4),ind.zfill(7))
+        if os.path.exists(new_fn):
+            continue
         shuffle(fn,new_fn)
 
 
