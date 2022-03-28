@@ -131,7 +131,7 @@ class Episode:
         # if os.path.exists(self.rootPath + f'/{self.ord}.pdf'):
         #     # 相同文件名已经存在 跳过下载
         #     return
-        if os.path.exists(self.rootPath+f"{self.ord}"):
+        if os.path.exists(self.rootPath+f"{self.ord}"+'/1_1.jpg'):
             # 相同文件名已经存在 跳过下载
             return
         rep = requests.post(url, data=payloads, headers=self.headers)
@@ -162,12 +162,12 @@ class Episode:
                 # with open(self.rootPath + f'/{self.ord}.pdf', 'wb') as f:
                 #     f.write(img2pdf.convert(imgs))
 
-                @retry()
-                def _():
-                    for img in imgs:
-                        os.remove(img)
-
-                _()
+                # @retry()
+                # def _():
+                #     for img in imgs:
+                #         os.remove(img)
+                #
+                # _()
 
 
 class Comic:
